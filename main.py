@@ -58,6 +58,12 @@ def execute_command(command, arg, system_commands, music_player, system_manager,
         return translator.translate_text(arg['text'], arg['language'])
     elif command == 'calculate':
         return calculator.calculate(arg)
+    elif command == 'whatsapp_message':
+        return system_commands.send_whatsapp_message()
+    elif command == 'whatsapp_call':
+        return system_commands.start_whatsapp_call(None)
+    elif command == 'whatsapp_video':
+        return system_commands.start_whatsapp_call(None, video=True)
     return "Commande non prédéfinie"
 
 def main():
@@ -92,6 +98,9 @@ def main():
     console.print("- 'liste [item]' : ajoute à la liste de courses")
     console.print("- 'traduis [texte] en [langue]' : traduit un texte")
     console.print("- 'calcule [expression]' : effectue un calcul")
+    console.print("- 'message' : envoyer un message WhatsApp")
+    console.print("- 'appel' : faire un appel audio WhatsApp")
+    console.print("- 'video' : faire un appel vidéo WhatsApp")
     console.print("- 'au revoir' : quitte l'assistant")
 
     while True:
@@ -132,3 +141,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+

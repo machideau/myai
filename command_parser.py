@@ -6,7 +6,10 @@ class CommandParser:
             'heure': self._parse_time,
             'date': self._parse_date,
             'luminosité': self._parse_brightness,
-            'volume': self._parse_volume
+            'volume': self._parse_volume,
+            'message': self._parse_whatsapp_message,
+            'appel': self._parse_whatsapp_call,
+            'video': self._parse_whatsapp_video
         }
 
     def parse_command(self, text):
@@ -51,4 +54,16 @@ class CommandParser:
         """Parse la commande 'volume'"""
         parts = text.split()
         level = next((p for p in parts if p.isdigit() or p.endswith('%')), None)
-        return 'volume', level 
+        return 'volume', level
+
+    def _parse_whatsapp_message(self, text):
+        """Parse la commande 'message'"""
+        return 'whatsapp_message', None
+
+    def _parse_whatsapp_call(self, text):
+        """Parse la commande 'appel'"""
+        return 'whatsapp_call', None
+
+    def _parse_whatsapp_video(self, text):
+        """Parse la commande 'video'"""
+        return 'whatsapp_video', None
