@@ -4,3 +4,8 @@ rich==13.4.2
 screen-brightness-control==0.14.2
 pycaw==20181226
 comtypes==1.2.0 
+
+pip install python-vlc        # Pour la gestion de la musique
+pip install googletrans==3.1.0a0  # Pour la traduction
+pip install python-json-logger    # Pour la gestion des logs
+pip install schedule            # Pour les rappels et minuteurs

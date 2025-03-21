@@ -4,6 +4,13 @@ from rich.console import Console
 from rich.status import Status
 from system_commands import SystemCommands
 from command_parser import CommandParser
+from music_commands import MusicPlayer
+from system_manager import SystemManager
+from time_manager import TimeManager
+from note_manager import NoteManager
+from translator import TranslationManager
+from calculator import VocalCalculator
+import translator
 
 def initialize_voice():
     engine = pyttsx3.init()
@@ -19,7 +26,7 @@ def listen():
         audio = recognizer.listen(source)
     return audio
 
-def execute_command(command, arg, system_commands):
+def execute_command(command, arg, system_commands, music_player, system_manager, time_manager, note_manager, translator, calculator):
     """Exécute la commande système appropriée"""
     if command == 'open':
         return system_commands.open_application(arg)
@@ -33,7 +40,25 @@ def execute_command(command, arg, system_commands):
         return system_commands.set_brightness(arg)
     elif command == 'volume':
         return system_commands.set_volume(arg)
-    return "commande non predefinie"
+    elif command == 'music':
+        return music_player.play_music(arg)
+    elif command == 'pause':
+        return music_player.pause_resume()
+    elif command == 'shutdown':
+        return system_manager.schedule_shutdown(int(arg))
+    elif command == 'reminder':
+        return time_manager.set_reminder(arg['message'], arg['time'])
+    elif command == 'timer':
+        return time_manager.set_timer(int(arg['minutes']), arg['message'])
+    elif command == 'note':
+        return note_manager.create_note(arg)
+    elif command == 'list':
+        return note_manager.add_to_list(arg)
+    elif command == 'translate':
+        return translator.translate_text(arg['text'], arg['language'])
+    elif command == 'calculate':
+        return calculator.calculate(arg)
+    return "Commande non prédéfinie"
 
 def main():
     console = Console()
@@ -41,6 +66,14 @@ def main():
     recognizer = sr.Recognizer()
     system_commands = SystemCommands()
     command_parser = CommandParser()
+
+    # Initialize new managers
+    music_player = MusicPlayer()
+    system_manager = SystemManager()
+    time_manager = TimeManager()
+    note_manager = NoteManager()
+    translator = TranslationManager()
+    calculator = VocalCalculator()
 
     console.print("[bold green]Assistant vocal démarré![/]")
     console.print("[bold blue]Commandes disponibles:[/]")
@@ -50,6 +83,15 @@ def main():
     console.print("- 'date' : donne la date actuelle")
     console.print("- 'luminosité [0-100]' : règle la luminosité")
     console.print("- 'volume [0-100]' : règle le volume")
+    console.print("- 'joue musique [titre]' : joue de la musique locale")
+    console.print("- 'pause' : met en pause/reprend la musique")
+    console.print("- 'éteins dans [minutes]' : programme l'arrêt")
+    console.print("- 'rappelle-moi [message] à [heure]' : crée un rappel")
+    console.print("- 'minuteur [minutes] [message]' : crée un minuteur")
+    console.print("- 'note [texte]' : crée une note")
+    console.print("- 'liste [item]' : ajoute à la liste de courses")
+    console.print("- 'traduis [texte] en [langue]' : traduit un texte")
+    console.print("- 'calcule [expression]' : effectue un calcul")
     console.print("- 'au revoir' : quitte l'assistant")
 
     while True:
@@ -71,7 +113,7 @@ def main():
 
                     command, arg = command_parser.parse_command(text)
                     if command:
-                        response = execute_command(command, arg, system_commands)
+                        response = execute_command(command, arg, system_commands, music_player, system_manager, time_manager, note_manager, translator, calculator)
                     else:
                         response = "Je ne comprends pas cette commande"
 
