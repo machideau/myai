@@ -91,7 +91,7 @@ pip install -r requirements.txt
 
 ## Structure du Projet
 
-- `voice_chat.py` : Script principal de l'assistant
+- `main.py` : Script principal de l'assistant
 - `system_commands.py` : Gestionnaire des commandes système
 - `command_parser.py` : Analyseur des commandes vocales
 - `music_commands.py` : Gestionnaire de musique
