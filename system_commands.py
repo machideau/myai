@@ -16,17 +16,23 @@ class SystemCommands:
 
     def open_application(self, app_name):
         """Ouvre une application"""
+        # Normalisation du nom de l'application
+        app_name = app_name.lower().strip()
+        
         common_paths = {
             "chrome": r"C:\Program Files\Google\Chrome\Application\chrome.exe",
             "firefox": r"C:\Program Files\Mozilla Firefox\firefox.exe",
+            "bloc-note": "notepad.exe",
+            "bloc-notes": "notepad.exe",
             "notepad": "notepad.exe",
             "calculatrice": "calc.exe",
+            "calculette": "calc.exe",
             "explorateur": "explorer.exe"
         }
         
         try:
-            if app_name.lower() in common_paths:
-                subprocess.Popen(common_paths[app_name.lower()])
+            if app_name in common_paths:
+                subprocess.Popen(common_paths[app_name])
                 return f"J'ouvre {app_name}"
             else:
                 return f"Je ne connais pas l'application {app_name}"
