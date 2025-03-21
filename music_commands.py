@@ -1,10 +1,10 @@
 import os
-import vlc
 from pathlib import Path
+import win32com.client
 
 class MusicPlayer:
     def __init__(self):
-        self.player = vlc.MediaPlayer()
+        self.player = win32com.client.Dispatch("WMPlayer.OCX")
         self.music_dir = str(Path.home() / "Music")
         self.current_playlist = []
         self.is_playing = False
@@ -20,12 +20,12 @@ class MusicPlayer:
 
     def pause_resume(self):
         """Met en pause ou reprend la lecture"""
-        if self.player.is_playing():
-            self.player.pause()
+        if self.is_playing:
+            self.player.controls.pause()
             self.is_playing = False
             return "Musique en pause"
         else:
-            self.player.play()
+            self.player.controls.play()
             self.is_playing = True
             return "Reprise de la lecture"
 
@@ -34,12 +34,13 @@ class MusicPlayer:
         music_files = []
         for root, _, files in os.walk(self.music_dir):
             for file in files:
-                if file.lower().endswith(('.mp3', '.wav', '.flac')) and query.lower() in file.lower():
+                if file.lower().endswith(('.mp3', '.wav', '.flac', '.wma')) and query.lower() in file.lower():
                     music_files.append(os.path.join(root, file))
         return music_files
 
     def _play_file(self, file_path):
         """Joue un fichier musical"""
-        self.player.set_mrl(file_path)
-        self.player.play()
+        media = self.player.newMedia(file_path)
+        self.player.currentPlaylist.appendItem(media)
+        self.player.controls.play()
         self.is_playing = True 
